@@ -1,21 +1,17 @@
-FROM golang:1.24 AS builder
+# Use an official Go image
+FROM golang:1.24
 
+# Set the working directory inside the container
 WORKDIR /app
 
-COPY go.mod .
-
-RUN go mod download
-
+# Copy all files from your project directory into the container
 COPY . .
 
-RUN go build -o ./main .
+# Build the Go application
+RUN go build -o app .
 
-FROM alpine:latest
-
-WORKDIR /app
-
-COPY --from=builder /app/main .
-
+# Expose the port the app runs on
 EXPOSE 8080
 
-CMD [ "/app/main" ]
+# Run the app
+CMD ["./app"]
